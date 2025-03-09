@@ -1,0 +1,138 @@
+<template>
+	<div>
+		<div>
+			<!-- 功能区域 -->
+			<el-form :inline="true" :model="queryCondition" class="demo-form-inline">
+
+				<el-form-item>
+					<el-button type="primary" @click="query()">批量删除</el-button>
+				</el-form-item>
+				<el-form-item>
+					<el-input v-model="queryCondition.id" placeholder="供货商ID"></el-input>
+				</el-form-item>
+	            <el-form-item>
+					<el-input v-model="queryCondition.proContact" placeholder="联系人"></el-input>
+				</el-form-item>
+				<el-form-item>
+					<el-input v-model="queryCondition.proAddress" placeholder="地址"></el-input>
+				</el-form-item>
+			   <el-form-item>
+					<el-button type="primary" @click="saveMark=true" icon="el-icon-search">新增</el-button>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="query()" icon="el-icon-message-solid">查询</el-button>
+				</el-form-item>
+			</el-form>
+
+		</div>
+		<div>
+			<!-- 数据显示区域 -->
+			<el-table :data="providerData" style="width: 100%" stripe border>
+				<el-table-column prop="id" label="供货商ID" width="180">
+				</el-table-column>
+				<el-table-column prop="proName" label="供货商名称" width="200">
+				</el-table-column>
+				<el-table-column prop="proContact" label="联系人">
+				</el-table-column>
+				<el-table-column prop="proAddress" label="地址">
+				</el-table-column>
+
+				<el-table-column label="操作">
+					<template slot-scope="scope">
+						<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+						<el-button size="mini" type="danger"
+							@click="handleDelete(scope.$index, scope.row)">删除</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+		</div>
+		<!-- 分页 -->
+		<div class="block" style="margin-top: 20px;">
+			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+				:current-page="currentPage" :page-sizes="[5, 10]" :page-size="100"
+				layout="total, sizes, prev, pager, next, jumper" :total="400">
+			</el-pagination>
+		</div>
+		<!-- 保存的面板，对话框，模态框 -->
+		<el-dialog title="保存学生" :visible.sync="saveMark">
+			<el-form :model="studentObj">
+				<el-form-item label="活动名称" :label-width="formLabelWidth">
+					<el-input v-model="studentObj.name" autocomplete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="活动区域" :label-width="formLabelWidth">
+					<el-select v-model="studentObj.city" placeholder="请选择活动区域">
+						<el-option label="上海" value="shanghai"></el-option>
+						<el-option label="北京" value="beijing"></el-option>
+					</el-select>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="saveMark = false">取 消</el-button>
+				<el-button type="primary" @click="saveMark = false">确 定</el-button>
+			</div>
+		</el-dialog>
+	</div>
+</template>
+
+<script>
+	export default {
+		mounted() {
+			query()
+		},
+		methods: {
+			handleSizeChange(val) {
+				console.log(`每页 ${val} 条`);
+			},
+			handleCurrentChange(val) {
+				console.log(`当前页: ${val}`);
+			},
+			// 查询按钮的功能
+			query(){
+				this.$postRequest('/provider/queryLimit',this.queryCondition).then(res=>{
+					console.log(res.data.providerData)
+					if(res){
+						this.providerList = res.data.providers;
+						this.providerData = res.data.providerData;
+						this.total = res.data.total;
+					}
+				})
+
+			},
+			handleEdit(index, row) {
+				console.log(index, row);
+			},
+			handleDelete(index, row) {
+				console.log(index, row);
+			}
+		},
+		data() {
+			return {
+				//保存面板需要的属性
+				saveMark: false,
+				studentObj: {
+					name: "",
+					city: ""
+				},
+				formLabelWidth: '120px',
+				// 分页有关的属性
+				// currentPage: 1,
+				total:10,
+				//查询条件
+				queryCondition:{
+				"currentPage": 1,
+				"id": '',
+				"pageSize": 5,
+				"proAddress": "",
+				"proContact": ""
+				},
+				providerData:[],
+				providerList:[]
+			}
+		}
+	}
+</script>
+
+<style>
+	/* 全局样式 */
+	
+</style>

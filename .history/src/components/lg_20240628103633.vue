@@ -1,0 +1,18 @@
+<template>
+    <div>
+        <el-row>
+            <el-col :span="8"><div class="grid-content bg-purple">
+              <router-link to="/lg" >编程语言</router-link>
+            </div></el-col>
+            <el-col :span="16"><div class="grid-content bg-purple-light">
+              <router-link to="/love">个人爱好</router-link>
+            </div></el-col>
+          </el-row>
+    </div>
+</template>
+<script>
+
+</script>
+<style>
+
+</style>
