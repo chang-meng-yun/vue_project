@@ -10,7 +10,7 @@
                     <el-button type="primary" @click="deleteAllAddress()">批量删除</el-button>
                 </el-form-item>
                 <el-form-item>
-                    <el-input v-model="queryCondition.id" placeholder="地址ID" style="width: 140px;"></el-input>
+                    <el-input v-model="queryCondition.id" placeholder="地址ID112" style="width: 140px;"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-input v-model="queryCondition.contact" placeholder="联系人"></el-input>
